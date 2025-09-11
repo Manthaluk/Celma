@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dating Den - Sign Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="flex items-center justify-center w-full">
+      
+      <span class="text-xl font-bold">DATING DEN</span>
+    </div>
+  </nav>
+
+  <div class="max-w-lg mx-auto p-4">
+    <div class="text-center mb-8">
+      <img src="logo.png" alt="Dating Den" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-lg" onerror="this.style.display='none';">
+      <h1 class="text-4xl font-bold text-purple-700 mb-2">DATING DEN </h1>
+<p class="text-gray-600">Are you seeking for girlfriend or boyfriend? This is the right place for you 💕.</p> 
+
+      <p class="text-red-600">Create your account</p>
+    </div>
+<p class="text-gray-600">
+<marquee>Safe, secure, and simple. Your details are protected, only your nickname is shown.</marquee>
+</p>
+
+    <div class="card">
+      <form id="signupForm">
+        <input type="text" id="firstName" placeholder="👤 First Name" required maxlength="30">
+        <input type="text" id="surname" placeholder="👤 Last Name" required maxlength="30">
+        <input type="text" id="nickname" placeholder="✨ Nickname" required maxlength="20">
+        
+        <select id="gender" required>
+          <option value="" disabled selected>👥 Select Gender</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+          <option value="non-binary">Non-binary</option>
+          <option value="prefer-not-to-say">Prefer not to say</option>
+        </select>
+        
+        <select id="age" required>
+          <option value="" disabled selected>🎂 Select Age</option>
+          <!-- Ages will be populated by JavaScript -->
+        </select>
+        
+        <input type="email" id="signupEmail" placeholder="📧 Email Address" required>
+        <input type="password" id="signupPassword" placeholder="🔒 Password (min 6 characters)" required minlength="6">
+        
+        <button type="submit" class="btn-primary mt-4" id="signupBtn">
+          <span class="btn-text">Create Account</span>
+          <span class="loading-spinner hidden">🔄</span>
+        </button>
+        
+        <p class="text-center mt-4">Already have an account? 
+          <a href="index.html" class="text-blue-600 hover:underline">Sign In</a>
+        </p>
+      </form>
+      <div id="signupError" class="error text-center"></div>
+    </div>
+  </div>
+
+<div class="flex justify-center space-x-8 my-6">
+  <!-- About Us Link -->
+  <a href="about.html" class="text-pink-600 font-semibold hover:underline text-lg">
+    About Us
+  </a>
+
+  <!-- Contact Us Mailto Link -->
+  <a 
+    href="mailto:onecelma1@gmail.com?subject=Dating%20Den%20Helpline"
+    class="text-pink-600 font-semibold hover:underline text-lg"
+  >
+    Contact Us
+  </a>
+</div>
+
+
+  <footer class="text-center py-8 mt-12">
+    <p class="text-gray-600">©️ 2025 Dating Den ❤️ </br> Celma </p>
+  </footer>
+
+  <script src="script.js"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b72da2450173e6',t:'MTc1NzI1ODMwMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

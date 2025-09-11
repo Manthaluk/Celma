@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dating Den - Settings</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation with menu -->
+  <nav class="navbar">
+    <div class="flex items-center">
+      <span class="menu-icon" id="menuBtn">&#9776;</span>
+     
+      <span class="text-xl font-bold">DATING DEN</span>
+    </div>
+  </nav>
+
+  <!-- Side Menu -->
+  <div id="sideMenu" class="side-menu">
+    <button onclick="location.href='home.html'">🏠 Home</button>
+    <button onclick="location.href='settings.html'">⚙️ Settings</button>
+    <button onclick="toggleTheme()">🌙 Dark Mode</button>
+    <button onclick="logoutFn()">🚪 Logout</button>
+  </div>
+
+  <!-- Settings Page -->
+  <div class="max-w-lg mx-auto p-4">
+    <div class="text-center mb-8">
+      <img src="logo.png" alt="Dating Den" class="w-20 h-20 rounded-full mx-auto mb-4 object-cover shadow-lg" onerror="this.style.display='none';">
+      <h1 class="text-4xl font-bold text-purple-700 mb-2">Settings</h1>
+      <p class="text-gray-600 dark:text-gray-300">Manage your profile and preferences</p>
+    </div>
+
+    <!-- Profile Settings -->
+    <div class="card mb-6">
+      <h2 class="text-2xl font-bold text-blue-600 mb-6">👤 Profile Settings</h2>
+      <form id="settingsForm">
+        <input type="text" id="settingsFirstName" placeholder="First Name" required>
+        <input type="text" id="settingsSurname" placeholder="Last Name" required>
+        <input type="text" id="settingsNickname" placeholder="Nickname" required maxlength="20">
+        <select id="settingsGender" required>
+          <option value="">Select Gender</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+          <option value="non-binary">Non-binary</option>
+          <option value="prefer-not-to-say">Prefer not to say</option>
+        </select>
+        <select id="settingsAge" required>
+          <option value="" disabled>Select Age</option>
+        </select>
+        <input type="password" id="settingsPassword" placeholder="New Password (optional)">
+        <textarea id="settingsBio" placeholder="Tell others about yourself..." maxlength="200" rows="3"></textarea>
+        <button type="submit" class="btn-primary mt-4" id="settingsBtn">
+          <span class="btn-text">💾 Save Profile</span>
+          <span class="loading-spinner hidden">🔄</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Privacy Settings -->
+    <div class="card">
+      <h2 class="text-2xl font-bold text-blue-600 mb-6">🔒 Privacy Settings</h2>
+      
+      <div class="space-y-4">
+        <!-- Online Status Setting -->
+        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+          <div>
+            <h3 class="font-semibold text-gray-800 dark:text-gray-200">🟢 Show Online Status</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Let others see when you're online in messages</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="showOnlineStatus" class="sr-only peer">
+            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+          </label>
+        </div>
+
+        <!-- Profile Visibility Setting -->
+        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+          <div>
+            <h3 class="font-semibold text-gray-800 dark:text-gray-200">🔍 Hide Profile from Search</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400">Prevent others from finding you in friend search</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="hideFromSearch" class="sr-only peer">
+            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600"></div>
+          </label>
+        </div>
+      </div>
+
+      <button onclick="savePrivacySettings()" class="btn-primary mt-6" id="privacyBtn">
+        <span class="btn-text">🔒 Save Privacy Settings</span>
+        <span class="loading-spinner hidden">🔄</span>
+      </button>
+    </div>
+  </div>
+
+  <footer class="text-center py-8 mt-12">
+    <div class="text-gray-600 dark:text-gray-300">©️ 2025 Dating Den ❤️</br> Celma </div>
+  </footer>
+
+  <script src="script.js"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97b6e70462c1738e',t:'MTc1NzI1NTQwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

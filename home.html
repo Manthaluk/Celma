@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dating Den - Home</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Navigation with menu button -->
+  <nav class="navbar">
+    <div class="flex items-center">
+      <span class="menu-icon" id="menuBtn">&#9776;</span>
+      <span class="text-xl font-bold">DATING DEN</span>
+    </div>
+  </nav>
+  <!-- Side Menu -->
+  <div id="sideMenu" class="side-menu">
+    <button onclick="location.href='home.html'">🏠 Home</button>
+    <button onclick="location.href='settings.html'">⚙️ Settings</button>
+    <button onclick="toggleTheme()">🌙 Dark Mode</button>
+    <button onclick="logoutFn()">🚪 Logout</button>
+  </div>
+  <div class="max-w-lg mx-auto p-4">
+    <div class="text-center mb-8">
+      <img src="logo.png" alt="Dating Den" class="w-20 h-20 rounded-full mx-auto mb-4 object-cover shadow-lg" onerror="this.style.display='none';">
+      <h1 class="text-4xl font-bold text-purple-700 mb-2">DATING DEN</h1>
+      <p id="welcomeMessage" class="text-gray-600 dark:text-gray-300">Ready to connect with amazing people?</p>
+    </div>
+    <!-- Notification for new messages -->
+    <div id="newMessagesNotification" class="hidden bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4 rounded-md" role="alert">
+      <p class="font-bold">New Message!</p>
+      <p>You have new messages waiting in your conversations.</p>
+    </div>
+    <div class="flex justify-center mb-6">
+      <button id="friendsBtn" class="toggle-btn active" onclick="showFriendsPanelFn()">👥 Friends</button>
+      <button id="messagesBtn" class="toggle-btn" onclick="showMessagesPanelFn()">💬 Messages</button>
+    </div>
+    <p class="text-gray-600">Discover your type! Search by gender and age to find someone who fits your preferences.</p>
+    <!-- Friends Panel -->
+    <div id="friendsPanel" class="card">
+      <h2 class="text-2xl font-bold text-blue-600 mb-4">Your Friends</h2>
+      <div id="friendsList"></div>
+      <button id="findFriendsToggle" class="btn-primary mt-4">🔍 Find Friends</button>
+      <!-- Find Friends Panel -->
+      <div id="findFriendsPanel" class="hidden mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <h3 class="text-lg font-bold text-purple-600 mb-4">🔍 Discover New Friends</h3>
+        <!-- Filter Controls -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2">Filter by Gender:</label>
+          <select id="genderFilter" class="w-full p-2 border rounded-lg">
+            <option value="">All Genders</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="non-binary">Non-binary</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-2">Age Range:</label>
+          <div class="flex gap-2">
+            <select id="minAgeFilter" class="flex-1 p-2 border rounded-lg">
+              <option value="">Min Age</option>
+            </select>
+            <select id="maxAgeFilter" class="flex-1 p-2 border rounded-lg">
+              <option value="">Max Age</option>
+            </select>
+          </div>
+        </div>
+        <button id="searchFriendsBtn" class="btn-primary mb-4" onclick="searchFriendsFn()">
+          <span class="btn-text">🔍 Search</span>
+          <span class="loading-spinner hidden">🔄</span>
+        </button>
+        <div id="searchResults" class="space-y-3"></div>
+      </div>
+    </div>
+    <!-- Messages Panel -->
+    <div id="messagesPanel" class="card hidden">
+      <h2 class="text-2xl font-bold text-blue-600 mb-4">Your Conversations</h2>
+      <!-- New messages banner -->
+      <div id="messagesNewBanner" class="hidden bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-3 mb-4 rounded-md">
+        <span class="font-bold">You have unread messages!</span>
+      </div>
+      <div id="allChats"></div>
+    </div>
+  </div>
+  <!-- Message Popup -->
+  <div id="messagePopup" class="popup hidden">
+    <div class="popup-content max-w-md">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center">
+          <span id="chatUserEmoji" class="text-2xl mr-2">👤</span>
+          <div>
+            <h3 id="chatUserName" class="font-bold text-lg"></h3>
+            <p id="chatUserInfo" class="text-sm text-gray-600"></p>
+          </div>
+        </div>
+        <button onclick="closeMessagePopup()" class="text-gray-500 hover:text-gray-700 text-xl">✕</button>
+      </div>
+      <div id="chatMessages" class="h-64 overflow-y-auto bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-4 space-y-2"></div>
+      <div class="flex gap-2">
+        <input type="text" id="messageInput" placeholder="💬 Type your message..." class="flex-1 p-2 border rounded-lg">
+        <button id="sendMessageBtn" onclick="sendMessageFn()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+          📤
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-center space-x-8 my-6">
+    <a href="about.html" class="text-pink-600 font-semibold hover:underline text-lg">About Us</a>
+    <a href="mailto:onecelma1@gmail.com?subject=Dating%20Den%20Helpline" class="text-pink-600 font-semibold hover:underline text-lg">Contact Us</a>
+  </div>
+  <footer class="text-center py-8 mt-12">
+    <div class="text-gray-600 dark:text-gray-300">©️ 2025 Dating Den ❤️ </br> Celma</div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
